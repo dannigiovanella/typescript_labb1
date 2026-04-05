@@ -66,37 +66,55 @@ form.addEventListener("submit", (event: SubmitEvent) => {
     //Lagrar kurser i local storage (gör om arrayen till textsträng )
     localStorage.setItem("courses", JSON.stringify(courses));
 
-//Kör funktion som visar kurser
-showCourses();
+    //Kör funktion som visar kurser
+    showCourses();
 
 });
 
-    // ==== Skriv ut i DOM ====
+// ==== Skriv ut i DOM ====
 
-    function showCourses() {
-        //Hämtar container för kurslista
-        const courseList = document.querySelector<HTMLDivElement>("#courselist")!;
+function showCourses() {
+    //Hämtar container för kurslista
+    const courseList = document.querySelector<HTMLDivElement>("#courselist")!;
 
-        // Tömmer listan först
-        courseList.innerHTML = "";
+    // Tömmer listan först
+    courseList.innerHTML = "";
 
-        // Loopar igenom array med tillagda kurser och skriver ut i divar
-        courses.forEach((course) => {
-            const courseDiv = document.createElement("div");
-            //Elmnet för varje del i div
-            courseDiv.innerHTML = `
+    // Loopar igenom array med tillagda kurser och skriver ut i divar (index = plats i arrayen)
+    courses.forEach((course, index: number) => {
+
+        const courseDiv = document.createElement("div");
+
+        //Element för varje del i div
+        courseDiv.innerHTML = `
             <h3>${course.code} - ${course.name}</h3>
             <p>Progression: ${course.progression}</p>
             <a href="${course.syllabus}">Kursplan</a>
+            <button>Ta bort</button>
         `;
-            //Lägger till varje div i kurslistan
-            courseList.appendChild(courseDiv);
+        //Hämtar id för delete-knapp
+        const deleteButton = courseDiv.querySelector<HTMLButtonElement>("button")!;
+
+        //Händelselyssnare för delete-knapp
+        deleteButton.addEventListener("click", () => {
+            deleteCourse(index);
         });
-    }
 
+        //Lägger till varje div i kurslistan
+        courseList.appendChild(courseDiv);
+    });
+}
 
-    function deleteCourse() {
+//Funktion för delete-knapp. Ta bort kurs
+function deleteCourse(index: number) {
+    // Tar bort 1 kurs ur arrayen
+    courses.splice(index, 1);
 
-    }
+    // Uppdaterar lista
+    localStorage.setItem("courses", JSON.stringify(courses));
+
+    // Skriver ut uppdaterad lista
+    showCourses();
+}
 
 showCourses();
