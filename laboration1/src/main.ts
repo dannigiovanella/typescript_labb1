@@ -19,7 +19,7 @@ const savedCourses = localStorage.getItem("courses");
 
 if (savedCourses) {
     //Gör om text till js array/objekt
-    courses = JSON.parse(savedCourses);
+    courses = JSON.parse(savedCourses) as CourseInfo[];
 }
 
 
@@ -33,11 +33,11 @@ form.addEventListener("submit", (event: SubmitEvent) => {
     event.preventDefault();
 
     //Hämtar input och select-element
-    const code = document.querySelector<HTMLInputElement>("#code")!.value;
-    const name = document.querySelector<HTMLInputElement>("#name")!.value;
+    const code: string = document.querySelector<HTMLInputElement>("#code")!.value;
+    const name: string = document.querySelector<HTMLInputElement>("#name")!.value;
 
     //Progressionsvärde kontrolleras med if-sats
-    const progressionValue = document.querySelector<HTMLSelectElement>("#progression")!.value
+    const progressionValue: string = document.querySelector<HTMLSelectElement>("#progression")!.value
 
     //Kontroll (narrowing) för värdet på select-element av progression
     if (
@@ -50,7 +50,7 @@ form.addEventListener("submit", (event: SubmitEvent) => {
     }
     const progression: "A" | "B" | "C" = progressionValue;
 
-    const syllabus = document.querySelector<HTMLInputElement>("#syllabus")!.value;
+    const syllabus: string = document.querySelector<HTMLInputElement>("#syllabus")!.value;
 
 
     //Objekt med insamlad data från form
@@ -94,5 +94,9 @@ showCourses();
         });
     }
 
+
+    function deleteCourse() {
+
+    }
 
 showCourses();
