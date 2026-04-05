@@ -1,5 +1,6 @@
 
-//Interface
+
+// ===== Interface =====
 
 interface CourseInfo {
     code: string;
@@ -8,7 +9,21 @@ interface CourseInfo {
     syllabus: string;
 }
 
-//Formulär
+// ==== Local Storage ====
+
+//Array att lagra flera kurser i
+let courses: CourseInfo[] = [];
+
+//Hämtar data om kurs som ligger sparat
+const savedCourses = localStorage.getItem("courses");
+
+if (savedCourses) {
+    //Gör om text till js array/objekt
+    courses = JSON.parse(savedCourses);
+}
+
+
+// ==== Formulär ====
 
 //Hämtar form-elementet. ! för att hantera ett eventuellt null
 const form = document.querySelector<HTMLFormElement>("#courseform")!;
@@ -45,6 +60,11 @@ form.addEventListener("submit", (event: SubmitEvent) => {
         progression,
         syllabus
     };
+
+    //Lägger till ny kurs i listan för local storage
+    courses.push(newCourse);
+    //Lagrar kurser i local storage (gör om arrayen till textsträng )
+    localStorage.setItem("courses", JSON.stringify(courses));
 
     //Skriv ut i DOM
 
