@@ -19,7 +19,11 @@ const savedCourses = localStorage.getItem("courses");
 
 if (savedCourses) {
     //Gör om text till js array/objekt
-    courses = JSON.parse(savedCourses) as CourseInfo[];
+    try {
+        courses = JSON.parse(savedCourses) as CourseInfo[];
+    } catch {
+        courses = [];
+    }
 }
 
 
@@ -73,7 +77,7 @@ form.addEventListener("submit", (event: SubmitEvent) => {
 
 // ==== Skriv ut i DOM ====
 
-function showCourses() {
+function showCourses(): void {
     //Hämtar container för kurslista
     const courseList = document.querySelector<HTMLDivElement>("#courselist")!;
 
@@ -81,7 +85,7 @@ function showCourses() {
     courseList.innerHTML = "";
 
     // Loopar igenom array med tillagda kurser och skriver ut i divar (index = plats i arrayen)
-    courses.forEach((course, index: number) => {
+    courses.forEach((course: CourseInfo, index: number): void => {
 
         const courseDiv = document.createElement("div");
 
@@ -106,7 +110,7 @@ function showCourses() {
 }
 
 //Funktion för delete-knapp. Ta bort kurs
-function deleteCourse(index: number) {
+function deleteCourse(index: number): void {
     // Tar bort 1 kurs ur arrayen
     courses.splice(index, 1);
 
