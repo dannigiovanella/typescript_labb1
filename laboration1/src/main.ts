@@ -66,23 +66,33 @@ form.addEventListener("submit", (event: SubmitEvent) => {
     //Lagrar kurser i local storage (gör om arrayen till textsträng )
     localStorage.setItem("courses", JSON.stringify(courses));
 
-    //Skriv ut i DOM
-
-    //Hämtar container för kurslista
-    const courseList = document.querySelector<HTMLDivElement>("#courselist")!;
-
-    //Skapar en div för varje kurs med innehåll
-    const courseDiv = document.createElement("div");
-
-    //Skriver ut inforamtionen i DOM
-    courseDiv.innerHTML = `
-  <h3>${newCourse.code} - ${newCourse.name}</h3>
-  <p>Progression: ${newCourse.progression}</p>
-  <a href="${newCourse.syllabus}">Kursplan</a>
-`;
-
-    //Lägger alla element i diven för varje kurs
-    courseList.appendChild(courseDiv);
+//Kör funktion som visar kurser
+showCourses();
 
 });
 
+    // ==== Skriv ut i DOM ====
+
+    function showCourses() {
+        //Hämtar container för kurslista
+        const courseList = document.querySelector<HTMLDivElement>("#courselist")!;
+
+        // Tömmer listan först
+        courseList.innerHTML = "";
+
+        // Loopar igenom array med tillagda kurser och skriver ut i divar
+        courses.forEach((course) => {
+            const courseDiv = document.createElement("div");
+            //Elmnet för varje del i div
+            courseDiv.innerHTML = `
+            <h3>${course.code} - ${course.name}</h3>
+            <p>Progression: ${course.progression}</p>
+            <a href="${course.syllabus}">Kursplan</a>
+        `;
+            //Lägger till varje div i kurslistan
+            courseList.appendChild(courseDiv);
+        });
+    }
+
+
+showCourses();
