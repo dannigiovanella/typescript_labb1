@@ -46,6 +46,23 @@ form.addEventListener("submit", (event: SubmitEvent) => {
         syllabus
     };
 
+    //Skriv ut i DOM
 
-    console.log(newCourse);
+    //Hämtar container för kurslista
+    const courseList = document.querySelector<HTMLDivElement>("#courselist")!;
+
+    //Skapar en div för varje kurs med innehåll
+    const courseDiv = document.createElement("div");
+
+    //Skriver ut inforamtionen i DOM
+    courseDiv.innerHTML = `
+  <h3>${newCourse.code} - ${newCourse.name}</h3>
+  <p>Progression: ${newCourse.progression}</p>
+  <a href="${newCourse.syllabus}">Kursplan</a>
+`;
+
+    //Lägger alla element i diven för varje kurs
+    courseList.appendChild(courseDiv);
+
 });
+
