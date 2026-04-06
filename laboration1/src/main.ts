@@ -50,7 +50,8 @@ form.addEventListener("submit", (event: SubmitEvent) => {
         progressionValue !== "C"
     ) {
         //Om nåt blir fel
-        throw new Error("Felaktigt progressionsvärde");
+        alert("Felaktigt progressionsvärde");
+        return;
     }
     const progression: "A" | "B" | "C" = progressionValue;
 
@@ -88,12 +89,13 @@ function showCourses(): void {
     courses.forEach((course: CourseInfo, index: number): void => {
 
         const courseDiv = document.createElement("div");
+        courseDiv.classList.add("coursecard");
 
         //Element för varje del i div
         courseDiv.innerHTML = `
             <h3>${course.code} - ${course.name}</h3>
             <p>Progression: ${course.progression}</p>
-            <a href="${course.syllabus}">Kursplan</a>
+            <a href="${course.syllabus}">Kursplan</a><br>
             <button>Ta bort</button>
         `;
         //Hämtar id för delete-knapp
