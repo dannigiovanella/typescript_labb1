@@ -1,6 +1,6 @@
 
 
-// ===== Interface =====
+// ===== INTERFACE =====
 
 interface CourseInfo {
     code: string;
@@ -9,13 +9,15 @@ interface CourseInfo {
     syllabus: string;
 }
 
-// ==== Local Storage ====
+
+
+// ==== LOCAL STORAGE ====
 
 //Array att lagra flera kurser i
 let courses: CourseInfo[] = [];
 
-//Hämtar data om kurs som ligger sparat
-const savedCourses = localStorage.getItem("courses");
+//Hämtar data om kurs som ligger sparat (textsträng eller inget)
+const savedCourses: string | null = localStorage.getItem("courses");
 
 if (savedCourses) {
     //Gör om text till js array/objekt
@@ -27,7 +29,7 @@ if (savedCourses) {
 }
 
 
-// ==== Formulär ====
+// ==== FORMULÄR ====
 
 //Hämtar form-elementet. ! för att hantera ett eventuellt null
 const form = document.querySelector<HTMLFormElement>("#courseform")!;
@@ -36,12 +38,15 @@ const form = document.querySelector<HTMLFormElement>("#courseform")!;
 form.addEventListener("submit", (event: SubmitEvent) => {
     event.preventDefault();
 
+    //Anpropar funktion som rensar felmeddelande
+    deleteErrorMessage();
+
     //Hämtar input och select-element
     const code: string = document.querySelector<HTMLInputElement>("#code")!.value;
     const name: string = document.querySelector<HTMLInputElement>("#name")!.value;
 
     //Progressionsvärde kontrolleras med if-sats
-    const progressionValue: string = document.querySelector<HTMLSelectElement>("#progression")!.value
+    const progressionValue: string = document.querySelector<HTMLSelectElement>("#progression")!.value;
 
     //Kontroll (narrowing) för värdet på select-element av progression
     if (
@@ -54,9 +59,25 @@ form.addEventListener("submit", (event: SubmitEvent) => {
         return;
     }
     const progression: "A" | "B" | "C" = progressionValue;
-
     const syllabus: string = document.querySelector<HTMLInputElement>("#syllabus")!.value;
 
+
+    //==== VALIDERING AV KURSKOD ====
+    let courseExists: boolean = false;
+
+    //Loopar igenom kurslista och kontrollerar kurskod
+
+    for (let i = 0; i < courses.length; i++) {
+        if (courses[i].code === code) {
+            courseExists = true;
+        }
+    }
+
+    if (courseExists) {
+        showErrorMessage("Kurs med denna kod finns redan");
+        return;
+    }
+    //===============
 
     //Objekt med insamlad data från form
     const newCourse: CourseInfo = {
@@ -74,9 +95,14 @@ form.addEventListener("submit", (event: SubmitEvent) => {
     //Kör funktion som visar kurser
     showCourses();
 
+    //Rensar formulär
+    form.reset();
+
 });
 
-// ==== Skriv ut i DOM ====
+
+
+// ==== SKRIV UT I DOM ====
 
 function showCourses(): void {
     //Hämtar container för kurslista
@@ -98,6 +124,7 @@ function showCourses(): void {
             <a href="${course.syllabus}">Kursplan</a><br>
             <button>Ta bort</button>
         `;
+
         //Hämtar id för delete-knapp
         const deleteButton = courseDiv.querySelector<HTMLButtonElement>("button")!;
 
@@ -111,6 +138,10 @@ function showCourses(): void {
     });
 }
 
+
+
+// ==== TA BORT KURS ====
+
 //Funktion för delete-knapp. Ta bort kurs
 function deleteCourse(index: number): void {
     // Tar bort 1 kurs ur arrayen
@@ -123,4 +154,23 @@ function deleteCourse(index: number): void {
     showCourses();
 }
 
+
+
+//==== FELMEDDELANDE ====
+
+//Hämtar id för felmeddelande
+const errorMessage = document.querySelector<HTMLElement>("#errormessage")!;
+
+//Funktion för att visa felmeddelande
+function showErrorMessage(message: string): void {
+    errorMessage.textContent = message;
+}
+
+//Funktion för att rensa felmeddelande
+function deleteErrorMessage(): void {
+    errorMessage.textContent = "";
+}
+
+
+// Anrpoar fuktion för att visa kurser
 showCourses();
